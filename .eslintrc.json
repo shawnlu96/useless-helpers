@@ -10,10 +10,12 @@
     "sourceType": "module",
     "ecmaVersion": 2020
   },
-  "plugins": ["@typescript-eslint", "jest"],
+  "plugins": ["@typescript-eslint", "jest", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    // Uncomment the following lines to enable the recommended rules for type checking.
+    //    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:jest/recommended",
     "prettier"
   ],
@@ -22,6 +24,22 @@
     // examples, and because it is not a recommended rule, you should either
     // disable it, or understand what it enforces.
     // https://typescript-eslint.io/rules/explicit-function-return-type/
-    "@typescript-eslint/explicit-function-return-type": "warn"
+    // see prettier setting in ./.prettierrc
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/no-inferrable-types": 0,
+    "@typescript-eslint/no-unused-vars": 1,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "no-param-reassign": 0,
+    "import/export": 0,
+    "max-len": [
+      "warn",
+      {
+        "code": 120,
+        "tabWidth": 4
+      }
+    ],
+    "no-void": 0,
+    "@typescript-eslint/ban-ts-comment": 0
   }
 }
