@@ -10,14 +10,17 @@
     "sourceType": "module",
     "ecmaVersion": 2020
   },
-  "plugins": ["@typescript-eslint", "jest", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "jest",
+    "prettier"
+  ],
   "extends": [
-    "eslint:recommended",
+    "prettier",
     "plugin:@typescript-eslint/recommended",
     // Uncomment the following lines to enable the recommended rules for type checking.
     //    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:jest/recommended",
-    "prettier"
+    "plugin:jest/recommended"
   ],
   "rules": {
     // The following rule is enabled only to supplement the inline suppression
@@ -25,21 +28,17 @@
     // disable it, or understand what it enforces.
     // https://typescript-eslint.io/rules/explicit-function-return-type/
     // see prettier setting in ./.prettierrc
-    "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/no-inferrable-types": 0,
-    "@typescript-eslint/no-unused-vars": 1,
-    "@typescript-eslint/no-var-requires": 0,
-    "@typescript-eslint/no-explicit-any": 0,
-    "no-param-reassign": 0,
-    "import/export": 0,
-    "max-len": [
-      "warn",
+    "prettier/prettier": [
+      "error",
+      {},
       {
-        "code": 120,
-        "tabWidth": 4
+        "usePrettierrc": true
       }
     ],
-    "no-void": 0,
-    "@typescript-eslint/ban-ts-comment": 0
+    "@typescript-eslint/no-inferrable-types": 0,
+    "@typescript-eslint/no-unused-vars": 2,
+    "@typescript-eslint/no-var-requires": 0,
+    // disable error for unused vars
+    "no-unused-vars": 0
   }
 }

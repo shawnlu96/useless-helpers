@@ -1,23 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "node16",
+    "target": "esnext",
+    "module": "esnext",
     "lib": ["ES2022"],
-    "moduleResolution": "node16",
+    "moduleResolution": "node",
     "rootDir": ".",
     "outDir": "build",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "importHelpers": true,
-    "alwaysStrict": true,
+    "alwaysStrict": false,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "__tests__/**/*"]
 }

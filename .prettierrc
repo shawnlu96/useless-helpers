@@ -2,9 +2,18 @@
   "singleQuote": true,
   "semi": false,
   "trailingComma": "all",
+  "printWidth": 120,
+  "tabWidth": 2,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "arrowParens": "avoid",
+  "proseWrap": "preserve",
   "overrides": [
     {
-      "files": ["*.ts", "*.mts"],
+      "files": [
+        "*.ts",
+        "*.mts"
+      ],
       "options": {
         "parser": "typescript"
       }
