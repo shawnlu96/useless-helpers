@@ -29,10 +29,7 @@ describe('greeter function', () => {
   // Assert if setTimeout was called properly
   it('delays the greeting by 2 seconds', () => {
     expect(setTimeout).toHaveBeenCalledTimes(1)
-    expect(setTimeout).toHaveBeenLastCalledWith(
-      expect.any(Function),
-      Delays.Long,
-    )
+    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), Delays.Long)
   })
 
   // Assert greeter result
