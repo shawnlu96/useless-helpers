@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: volta-cli/action@v1
+        with:
+          node-version: 18.12
       - run: npm ci --no-audit
       - run: npm run lint --if-present
       - run: npm test
