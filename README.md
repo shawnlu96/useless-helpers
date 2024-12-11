@@ -1,4 +1,4 @@
-The Ethers Project
+Useless Helpers
 ==================
 
 [![npm (tag)](https://img.shields.io/npm/v/useless-helpers)](https://www.npmjs.com/package/useless-helpers)
