@@ -9,16 +9,38 @@ export async function forEachAsync<T>(
   options?: ForEachAsyncOptions,
 ) {
   options = {
-    timeout: null,
-    retries: 0,
-    showLog: true,
-    logger: console.log,
+    timeoutArgs: null,
+    retries: null,
+    showProgress: true,
+    skipError: false,
     ...options,
   }
   let running = 0
   let completed = 0
   let currentTaskIndex = 0
   return new Promise<void>(resolve => {
+    let retriedAsyncFn = asyncFn
+    if (options.retries) {
+      retriedAsyncFn = async (item, index) =>
+        await polly()
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          .waitAndRetry(options.retries)
+          .executeForPromise(async info => {
+            if (options.showProgress && info.count) {
+              console.log('retrying...', info.count)
+            }
+            await asyncFn(item, index)
+          })
+    }
+    let finalAsyncFn = retriedAsyncFn
+    if (options.timeoutArgs) {
+      finalAsyncFn = async (item, index) => {
+        await runWithTimeout(async () => {
+          await retriedAsyncFn(item, index)
+        }, options.timeoutArgs)
+      }
+    }
     const runTask = async () => {
       if (completed >= array.length) {
         resolve()
@@ -32,60 +54,25 @@ export async function forEachAsync<T>(
         running++
 
         const promise = () =>
-          options.timeout
-            ? runWithTimeout(async () => {
-                options.logger(`running ${index}/${array.length}...`)
-                await asyncFn(item, index)
-                options.logger(`finished ${index}/${array.length}`)
-                running--
-                completed++
-                void runTask()
-              }, options.timeout)
-            : (async () => {
-                options.logger(`running ${index}/${array.length}...`)
-                await asyncFn(item, index)
-                options.logger(`finished ${index}/${array.length}`)
-                running--
-                completed++
-                void runTask()
-              })()
-        if (options.retries) {
-          if (typeof options.retries === 'number') {
-            void polly()
-              .waitAndRetry(options.retries)
-              .executeForPromise(async info => {
-                if (options.showLog && info.count) {
-                  options.logger(`retrying ${info.count} times.`)
-                }
-                try {
-                  await promise()
-                } catch (e) {
-                  if (options.showLog) {
-                    options.logger(e, `error on retry: ${info.count}`)
-                  }
-                  throw e
-                }
-              })
-          } else if (typeof options.retries === 'object') {
-            void polly()
-              .waitAndRetry(options.retries)
-              .executeForPromise(async info => {
-                if (options.showLog && info.count) {
-                  options.logger(`retrying ${info.count} times.`)
-                }
-                try {
-                  await promise()
-                } catch (e) {
-                  if (options.showLog) {
-                    options.logger(e, `error on retry: ${info.count}`)
-                  }
-                  throw e
-                }
-              })
-          }
-        } else {
-          void promise()
-        }
+          (async () => {
+            try {
+              if (options.showProgress) console.log(`task ${index + 1}/${array.length} started`)
+              await finalAsyncFn(item, index)
+            } catch (e) {
+              if (options.showProgress) {
+                console.error(`task ${index + 1}/${array.length} failed, cause:${e.message}`)
+              }
+              if (!options.skipError) {
+                throw e
+              }
+            }
+            if (options.showProgress) console.log(`task ${index + 1}/${array.length} finished`)
+
+            running--
+            completed++
+            void runTask()
+          })()
+        void promise()
       }
     }
     // 初始化并发任务

@@ -1,10 +1,10 @@
 import { TimeoutError } from './exceptions'
 
 export interface ForEachAsyncOptions {
-  timeout?: TimeoutArgs
+  timeoutArgs?: TimeoutArgs
   retries?: number | number[]
-  showLog?: boolean
-  logger?: (...arg0: any[]) => void
+  showProgress?: boolean
+  skipError?: boolean
 }
 
 export interface TimeoutArgs {
